@@ -1,0 +1,50 @@
+version: "3.8"
+
+services:
+
+  agent:
+    # Conferir a versão em: https://hub.docker.com/r/portainer/portainer-ce/tags
+    image: portainer/agent:${PORTAINER_AGENT_VERSION}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/docker/volumes:/var/lib/docker/volumes
+    networks:
+      - ${DOCKER_NETWORK}
+    deploy:
+      mode: global
+      placement:
+        constraints: [node.platform.os == linux]
+
+  portainer:
+    # Conferir a versão em: https://hub.docker.com/r/portainer/portainer-ce/tags
+    image: portainer/portainer-ce:${PORTAINER_VERSION}    
+    command: -H tcp://tasks.agent:9001 --tlsskipverify
+    volumes:
+      - ${PORTAINER_VOLUME}:/data
+    networks:
+      - ${DOCKER_NETWORK}
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
+      labels:
+        - "traefik.enable=true"
+        - "traefik.docker.network=${DOCKER_NETWORK}"
+        - "traefik.http.routers.portainer.rule=Host(`${PORTAINER_DOMAIN}`)"
+        - "traefik.http.routers.portainer.entrypoints=websecure"
+        - "traefik.http.routers.portainer.priority=1"
+        - "traefik.http.routers.portainer.tls.certresolver=letsencryptresolver"
+        - "traefik.http.routers.portainer.service=portainer"
+        - "traefik.http.services.portainer.loadbalancer.server.port=9000"
+
+networks:
+  ${DOCKER_NETWORK}:
+    external: true
+    attachable: true
+    name: ${DOCKER_NETWORK}
+
+volumes:
+  ${PORTAINER_VOLUME}:
+    external: true
+    name: ${PORTAINER_VOLUME}
