@@ -24,8 +24,18 @@ curl -fsSL https://get.docker.com | bash
 ```bash
   docker swarm init --advertise-addr <IP_manager>
 ```
-*Aparecerá uma mensagem! Caso queira adicionar outros nós (worker e manager), anote os comandos*
+*Aparecerá uma mensagem! Guarde os dois comandos (adição de worker e de manager) em um lugar seguro.
 
+**Caso queira adicionar outros nós (worker e manager) e assim, formar um cluster, acesse a(s) outras VM(s), instale o docker e utilize o respectivo comando salvo anteriormente.**
+
+**Antes inicar qualquers container, crie manualmente a sua rede docker (ex: SuaRede-swarm):**
+```bash
+docker network create --driver=overlay SuaRede-swarm
+```
+* Com isso, seu cluster docker swarm está pronto.
+
+
+##### DOWNLOAD DO REPOSITORIO:
 
 **Acesse ou crie uma pasta (ex: /opt), para armazenar os arquivos yaml:**
 ```bash
@@ -42,14 +52,17 @@ curl -fsSL https://get.docker.com | bash
   cd /opt/portainer_traefik`
 ```
 
-**Edite e faça os devidos ajustes no arquivo de variáveis ".env":**
-```bash
-nano .env
-```
+##### TRAEFIK:
 
-**Antes inicar os containers, crie manualmente a sua rede docker (ex: rede-swarm), indicada em seu arquivo .env:**
+**Editer o arquivo traefik.yaml:**
 ```bash
-docker network create --driver=overlay rede-swarm
+nano traefik.yaml
+```
+**Como o docker swarm não suporta corretamente variáveis externas, defina manualmente:**
+```bash
+Procure pelas respectivas variáveis e substitua pelos respectivos valores:
+${LETSENCRYPT_EMAIL}: SeuEmail@dominio.com (deve ser um e-mail válido) - 1 ocorrência no arquivo
+${DOCKER_NETWORK}: SuaRede-swarm (mesma rede criada anteriormente) - 4 ocorrências no arquivo
 ```
 
 inicie o container do Traefik:
@@ -57,6 +70,19 @@ inicie o container do Traefik:
   docker stack deploy --prune --resolve-image always -c traefik.yaml traefik
 ```
 
+##### PORTAINER:
+
+**Editer o arquivo portainer.yaml:**
+```bash
+nano portainer.yaml
+```
+**Como o docker swarm não suporta corretamente variáveis externas, defina manualmente:**
+```bash
+Procure pelas respectivas variáveis e substitua pelos respectivos valores:
+${PORTAINER_VOLUME}: portainer_data (nome do volume) - 3 ocorrências no arquivo
+${PORTAINER_DOMAIN}: portainer.dominio.com (nome do subdominio de acesso ao portainer) - 1 ocorrência no arquivo
+${DOCKER_NETWORK}: SuaRede-swarm (mesma rede criada anteriormente) - 5 ocorrências no arquivo
+```
 Inicie o container do portainer:
 ```bash
 docker stack deploy --prune --resolve-image always -c portainer.yaml portainer
@@ -64,5 +90,3 @@ docker stack deploy --prune --resolve-image always -c portainer.yaml portainer
 
 
 ## Após as etapas acima, já deve ser possível acessar o portainer pelo seu navegador web
-
-## *Caso queira adicionar outros nós (worker e manager), acesse as outras VMs, instale o docker e utilize os comandos anotados na etapa de inicalização do swarm*

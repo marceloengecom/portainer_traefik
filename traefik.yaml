@@ -3,7 +3,8 @@ version: "3.8"
 services:
 
   traefik:
-    image: traefik:${TRAEFIK_VERSION}
+    # Em ambiente de produção, defina uma versão devidamente testada do traefik
+    image: traefik:latest
     command:
       - "--api.dashboard=true"
       - "--providers.docker.swarmMode=true"
@@ -51,13 +52,12 @@ services:
       - ${DOCKER_NETWORK}
 
 volumes:
-
   vol_shared:
     external: true
-    name: volume_swarm_shared
+    name: volume_traefik_shared
   vol_certificates:
     external: true
-    name: volume_swarm_certificates
+    name: volume_traefik_certificates
 
 networks:
   ${DOCKER_NETWORK}:
