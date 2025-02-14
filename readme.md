@@ -52,6 +52,7 @@ docker network create --driver=overlay SuaRede-swarm
   cd /opt/portainer_traefik`
 ```
 
+
 #### TRAEFIK:
 
 **Editer o arquivo traefik.yaml:**
@@ -59,6 +60,7 @@ docker network create --driver=overlay SuaRede-swarm
 nano traefik.yaml
 ```
 **Como o docker swarm não suporta corretamente variáveis externas, defina manualmente:**
+
 Procure pelas variáveis e substitua pelos respectivos valores:
 ```bash
 ${LETSENCRYPT_EMAIL}: SeuEmail@dominio.com (deve ser um e-mail válido) - 1 ocorrência no arquivo
@@ -70,6 +72,7 @@ inicie o container do Traefik:
   docker stack deploy --prune --resolve-image always -c traefik.yaml traefik
 ```
 
+
 #### PORTAINER:
 
 **Editer o arquivo portainer.yaml:**
@@ -77,6 +80,7 @@ inicie o container do Traefik:
 nano portainer.yaml
 ```
 **Como o docker swarm não suporta corretamente variáveis externas, defina manualmente:**
+
 Procure pelas variáveis e substitua pelos respectivos valores:
 ```bash
 ${PORTAINER_VOLUME}: portainer_data (nome do volume) - 3 ocorrências no arquivo
