@@ -25,9 +25,10 @@ services:
       - "--accesslog=true"
       - "--accesslog.filepath=/var/log/traefik/access-log"
     deploy:
+      mode: replicated
+      replicas: 2
       placement:
-        constraints:
-          - node.role == manager
+        constraints: [node.role == manager]
       labels:
         - "traefik.enable=true"
         - "traefik.http.middlewares.redirect-https.redirectscheme.scheme=https"
