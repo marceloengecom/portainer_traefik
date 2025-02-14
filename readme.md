@@ -84,7 +84,7 @@ nano portainer.yaml
 Procure pelas variáveis e substitua pelos respectivos valores:
 ```bash
 ${PORTAINER_VOLUME}: portainer_data (nome do volume) - 3 ocorrências no arquivo
-${PORTAINER_DOMAIN}: portainer.dominio.com (nome do subdominio do portainer) - 1 ocorrência no arquivo
+${PORTAINER_DOMAIN}: portainer.dominio.com (subdominio do portainer) - 1 ocorrência no arquivo
 ${DOCKER_NETWORK}: SuaRede-swarm (mesma rede criada anteriormente) - 5 ocorrências no arquivo
 ```
 Inicie o container do portainer:
