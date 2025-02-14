@@ -5,7 +5,7 @@ Após subir os containers do Traefik e Portainer, podemos criar e gerenciar as s
 Obs: Como vamos utilizar um proxy reverso, é importante já ter o dominio do portainer (ex:portainer.seudominio.com) devidamente criado e já propagado pela internet.
 
 
-#### Etapas no Ubuntu 24.04 LTS:
+#### ETAPAS NO UBUNTU 24.04 LTS:
 
 **logado como usuário 'root', Atualizar o servidor:**
 ```bash
@@ -35,7 +35,7 @@ docker network create --driver=overlay SuaRede-swarm
 * Com isso, seu cluster docker swarm está pronto.
 
 
-##### DOWNLOAD DO REPOSITORIO:
+#### DOWNLOAD DO REPOSITORIO:
 
 **Acesse ou crie uma pasta (ex: /opt), para armazenar os arquivos yaml:**
 ```bash
@@ -52,7 +52,7 @@ docker network create --driver=overlay SuaRede-swarm
   cd /opt/portainer_traefik`
 ```
 
-##### TRAEFIK:
+#### TRAEFIK:
 
 **Editer o arquivo traefik.yaml:**
 ```bash
@@ -70,7 +70,7 @@ inicie o container do Traefik:
   docker stack deploy --prune --resolve-image always -c traefik.yaml traefik
 ```
 
-##### PORTAINER:
+#### PORTAINER:
 
 **Editer o arquivo portainer.yaml:**
 ```bash
