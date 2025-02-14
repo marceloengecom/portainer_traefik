@@ -47,19 +47,19 @@ curl -fsSL https://get.docker.com | bash
 nano .env
 ```
 
-**Antes inicar os containers, crie manualmente a sua rede docker (ex: SuaRede), indicada em seu arquivo .env:**
+**Antes inicar os containers, crie manualmente a sua rede docker (ex: rede-swarm), indicada em seu arquivo .env:**
 ```bash
-docker network create --driver=overlay SuaRede
+docker network create --driver=overlay rede-swarm
 ```
 
 inicie o container do Traefik:
 ```bash
-  docker stack deploy --prune --resolve-image always -c traefik.yaml --env-file .env traefik
+  docker stack deploy --prune --resolve-image always -c traefik.yaml traefik
 ```
 
 Inicie o container do portainer:
 ```bash
-docker stack deploy --prune --resolve-image always -c portainer.yaml --env-file .env portainer
+docker stack deploy --prune --resolve-image always -c portainer.yaml portainer
 ```
 
 
