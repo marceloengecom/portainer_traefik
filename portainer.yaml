@@ -11,9 +11,10 @@ services:
       - /var/lib/docker/volumes:/var/lib/docker/volumes
     networks:
       - ${DOCKER_NETWORK}
+    ports:
+      - "9001:9001"  # Porta necessária para comunicação com o Portainer CE
     deploy:
-      mode: replicated
-      replicas: 2  # Múltiplas réplicas para alta disponibilidade
+      mode: global  # Roda 1 instância em cada nó do Swarm
 
   portainer:
     # Em ambiente de produção, defina uma versão devidamente testada do traefik
@@ -26,7 +27,8 @@ services:
       - ${DOCKER_NETWORK}
     deploy:
       mode: replicated
-      replicas: 2  # Múltiplas réplicas para alta disponibilidade
+      replicas: 1  # o Portainer CE não é projetado para ser executado com múltiplas réplicas.  Para HA, considere usar o Portainer Business Edition
+
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=${DOCKER_NETWORK}"
