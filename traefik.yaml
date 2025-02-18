@@ -4,7 +4,7 @@ services:
 
   traefik:
     # Em ambiente de produção, defina uma versão devidamente testada do traefik
-    image: traefik:latest
+    image: traefik:2.11.2
     command:
       - "--api.dashboard=true"
       - "--providers.docker.swarmMode=true"
@@ -27,17 +27,16 @@ services:
       - "--accesslog.filepath=/var/log/traefik/access-log"
     deploy:
       mode: replicated
-      replicas: 2
-      placement:
-        constraints: [node.role == manager]
-      labels:
+      replicas: 2  # Múltiplas réplicas para alta disponibilidade
+    
+    labels:
         - "traefik.enable=true"
         - "traefik.http.middlewares.redirect-https.redirectscheme.scheme=https"
         - "traefik.http.middlewares.redirect-https.redirectscheme.permanent=true"
         - "traefik.http.routers.http-catchall.rule=hostregexp(`{host:.+}`)"
         - "traefik.http.routers.http-catchall.entrypoints=web"
         - "traefik.http.routers.http-catchall.middlewares=redirect-https@docker"
-        - "traefik.http.routers.http-catchall.priority=1"
+        - "traefik.http.routers.http-catchall.priority=1"    
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "vol_certificates:/etc/traefik/letsencrypt"

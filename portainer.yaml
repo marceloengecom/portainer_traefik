@@ -13,9 +13,7 @@ services:
       - ${DOCKER_NETWORK}
     deploy:
       mode: replicated
-      replicas: 2
-      placement:
-        constraints: [node.role == manager]
+      replicas: 2  # Múltiplas réplicas para alta disponibilidade
 
   portainer:
     # Em ambiente de produção, defina uma versão devidamente testada do traefik
@@ -28,18 +26,16 @@ services:
       - ${DOCKER_NETWORK}
     deploy:
       mode: replicated
-      replicas: 2
-      placement:
-        constraints: [node.role == manager]
-      labels:
-        - "traefik.enable=true"
-        - "traefik.docker.network=${DOCKER_NETWORK}"
-        - "traefik.http.routers.portainer.rule=Host(`${PORTAINER_DOMAIN}`)"
-        - "traefik.http.routers.portainer.entrypoints=websecure"
-        - "traefik.http.routers.portainer.priority=1"
-        - "traefik.http.routers.portainer.tls.certresolver=letsencryptresolver"
-        - "traefik.http.routers.portainer.service=portainer"
-        - "traefik.http.services.portainer.loadbalancer.server.port=9000"
+      replicas: 2  # Múltiplas réplicas para alta disponibilidade
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=${DOCKER_NETWORK}"
+      - "traefik.http.routers.portainer.rule=Host(`${PORTAINER_DOMAIN}`)"
+      - "traefik.http.routers.portainer.entrypoints=websecure"
+      - "traefik.http.routers.portainer.priority=1"
+      - "traefik.http.routers.portainer.tls.certresolver=letsencryptresolver"
+      - "traefik.http.routers.portainer.service=portainer"
+      - "traefik.http.services.portainer.loadbalancer.server.port=9000"
 
 networks:
   ${DOCKER_NETWORK}:
