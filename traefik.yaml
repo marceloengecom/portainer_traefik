@@ -29,7 +29,7 @@ services:
       mode: replicated
       replicas: 2  # Múltiplas réplicas para alta disponibilidade
     
-    labels:
+      labels:
         - "traefik.enable=true"
         - "traefik.http.middlewares.redirect-https.redirectscheme.scheme=https"
         - "traefik.http.middlewares.redirect-https.redirectscheme.permanent=true"
