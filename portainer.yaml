@@ -14,7 +14,7 @@ services:
     ports:
       - "9001:9001"  # Porta necessária para comunicação com o Portainer CE
     deploy:
-      mode: global  # Roda 1 instância em cada nó do Swarm
+      mode: global # Roda 1 instância em cada nó do Swarm
 
   portainer:
     # Em ambiente de produção, defina uma versão devidamente testada do traefik
@@ -22,22 +22,23 @@ services:
     image: portainer/portainer-ce:latest
     command: -H tcp://tasks.agent:9001 --tlsskipverify
     volumes:
-      - ${PORTAINER_VOLUME}:/data
+      - portainer_data:/data
     networks:
       - ${DOCKER_NETWORK}
     deploy:
       mode: replicated
-      replicas: 1  # o Portainer CE não é projetado para ser executado com múltiplas réplicas.  Para HA, considere usar o Portainer Business Edition
-
-    labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=${DOCKER_NETWORK}"
-      - "traefik.http.routers.portainer.rule=Host(`${PORTAINER_DOMAIN}`)"
-      - "traefik.http.routers.portainer.entrypoints=websecure"
-      - "traefik.http.routers.portainer.priority=1"
-      - "traefik.http.routers.portainer.tls.certresolver=letsencryptresolver"
-      - "traefik.http.routers.portainer.service=portainer"
-      - "traefik.http.services.portainer.loadbalancer.server.port=9000"
+      replicas: 1       # O Portainer CE não é projetado para ser executado com múltiplas réplicas.  Para HA, considere usar o Portainer Business Edition
+      placement:
+        constraints: [node.role == manager] # Será executado no nó manager
+      labels:
+        - "traefik.enable=true"
+        - "traefik.docker.network=${DOCKER_NETWORK}"
+        - "traefik.http.routers.portainer.rule=Host(`${PORTAINER_DOMAIN}`)"
+        - "traefik.http.routers.portainer.entrypoints=websecure"
+        - "traefik.http.routers.portainer.priority=1"
+        - "traefik.http.routers.portainer.tls.certresolver=letsencryptresolver"
+        - "traefik.http.routers.portainer.service=portainer"
+        - "traefik.http.services.portainer.loadbalancer.server.port=9000"
 
 networks:
   ${DOCKER_NETWORK}:
@@ -46,6 +47,6 @@ networks:
     name: ${DOCKER_NETWORK}
 
 volumes:
-  ${PORTAINER_VOLUME}:
+  portainer_data:
     external: true
-    name: ${PORTAINER_VOLUME}
+    name: portainer_data
