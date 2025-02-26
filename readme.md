@@ -9,7 +9,7 @@ Obs: Como vamos utilizar um proxy reverso, é importante já ter o dominio do po
 
 **logado como usuário 'root', Atualizar o servidor:**
 ```bash
-apt update && apt upgrade
+apt update && apt upgrade -y
 ```
 
 **Estando no servidor, como root, instalar o docker:**

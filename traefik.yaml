@@ -1,4 +1,8 @@
-version: "3.8"
+################################################################################################
+#
+# Substitua as variáveis ${LETSENCRYPT_EMAIL} e ${DOCKER_NETWORK} pelos valores correspondentes
+#
+################################################################################################
 
 services:
 
@@ -26,9 +30,13 @@ services:
       - "--accesslog=true"
       - "--accesslog.filepath=/var/log/traefik/access-log"
     deploy:
+      #mode: global # Roda 1 instância em cada nó do Swarm
       mode: replicated
-      replicas: 2  # Múltiplas réplicas para alta disponibilidade
-    
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+         # - node.hostname == srvbotpro-master1    
       labels:
         - "traefik.enable=true"
         - "traefik.http.middlewares.redirect-https.redirectscheme.scheme=https"
