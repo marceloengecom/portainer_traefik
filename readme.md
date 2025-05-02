@@ -104,3 +104,25 @@ docker stack deploy --prune --resolve-image always -c portainer.yaml portainer
 
 
 ## Após as etapas acima, já deve ser possível acessar o portainer pelo seu navegador web
+
+
+
+#### Caso queira utilizar o arquivo .env, após a etapa "DOWNLOAD DO REPOSITORIO", faça o seguinte procedimento:
+
+**Não mude nada nos arquivos .yaml e ajuste as suas respectivas variáveis no arquivo .env:**
+```bash
+  nano /opt/portainer_traefik/.env`
+```
+**Carregue todas as variáveis do .env como variável de ambiente:**
+```bash
+  export $(grep -v '^#' .env | xargs)
+```
+
+**Lê as variáveis do ambiente (que você acabou de exportar) e faz o deploy da stack com as respectivas variáveis:**
+```bash
+  envsubst < traefik.yaml | docker stack deploy --prune --resolve-image always -c - traefik
+```
+**Lê as variáveis do ambiente (que você acabou de exportar) e faz o deploy da stack com as respectivas variáveis:**
+```bash
+  envsubst < portainer.yaml | docker stack deploy --prune --resolve-image always -c - portainer
+```
