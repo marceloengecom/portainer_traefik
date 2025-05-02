@@ -1,6 +1,6 @@
 ################################################################################################
 #
-# Substitua as variáveis ${LETSENCRYPT_EMAIL} e ${DOCKER_NETWORK} pelos valores correspondentes
+# Substitua as variáveis ${LETSENCRYPT_EMAIL}, ${TRAEFIK_DOMAIN} e ${DOCKER_NETWORK} pelos valores correspondentes
 #
 ################################################################################################
 
@@ -38,15 +38,21 @@ services:
          # - node.hostname == srvbotpro-master1    
       labels:
         - "traefik.enable=true"
-        - "traefik.http.middlewares.redirect-https.redirectscheme.scheme=https"
+        - "traefik.http.middlewares.redirect-https.redirectscheme.scheme=https"        
         - "traefik.http.middlewares.redirect-https.redirectscheme.permanent=true"
         - "traefik.http.routers.http-catchall.rule=hostregexp(`{host:.+}`)"
         - "traefik.http.routers.http-catchall.entrypoints=web"
-        - "traefik.http.routers.http-catchall.middlewares=redirect-https@docker"
-        - "traefik.http.routers.http-catchall.priority=1"    
+        - "traefik.http.routers.http-catchall.middlewares=redirect-https@swarm"
+        - "traefik.http.routers.http-catchall.priority=1"
+        - "traefik.http.routers.traefik.rule=Host(`${TRAEFIK_DOMAIN}`)"
+        - "traefik.http.routers.traefik.entrypoints=websecure"
+        - "traefik.http.routers.traefik.service=api@internal"
+        - "traefik.http.routers.traefik.tls.certresolver=letsencryptresolver"
+            
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "vol_certificates:/etc/traefik/letsencrypt"
+      - "vol_logs:/var/log/traefik"
     ports:
       - target: 80
         published: 80
@@ -60,10 +66,14 @@ services:
 volumes:
   vol_shared:
     external: true
-    name: volume_traefik_shared
+    name: traefik_shared
   vol_certificates:
     external: true
-    name: volume_traefik_certificates
+    name: traefik_certificates
+  vol_logs:
+    external: true
+    name: traefik_logs
+
 
 networks:
   ${DOCKER_NETWORK}:
