@@ -8,13 +8,12 @@ services:
 
   traefik:
     # Em ambiente de produção, defina uma versão devidamente testada do traefik
-    image: traefik:2.11.2
+    image: traefik:latest
     command:
       - "--api.dashboard=true"
-      - "--providers.docker.swarmMode=true"
-      - "--providers.docker.endpoint=unix:///var/run/docker.sock"
-      - "--providers.docker.exposedbydefault=false"
-      - "--providers.docker.network=${DOCKER_NETWORK}"
+      - "--providers.swarm.endpoint=unix:///var/run/docker.sock"
+      - "--providers.swarm.exposedbydefault=false"
+      - "--providers.swarm.network=${DOCKER_NETWORK}"
       - "--entrypoints.web.address=:80"
       - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
       - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
