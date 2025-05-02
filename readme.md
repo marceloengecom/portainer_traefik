@@ -74,6 +74,7 @@ nano traefik.yaml
 Procure pelas variáveis e substitua pelos respectivos valores:
 ```bash
 ${LETSENCRYPT_EMAIL}: SeuEmail@dominio.com (deve ser um e-mail válido) - 1 ocorrência no arquivo
+${TRAEFIK_DOMAIN}: traefik.dominio.com (deve ser um domínio válido e publicado) - 1 ocorrência no arquivo
 ${DOCKER_NETWORK}: SuaRede-swarm (mesma rede criada anteriormente) - 4 ocorrências no arquivo
 ```
 
