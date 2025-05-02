@@ -28,10 +28,20 @@ curl -fsSL https://get.docker.com | bash
 
 **Caso queira adicionar outros nós (worker e manager) e assim, formar um cluster, acesse a(s) outras VM(s), instale o docker e utilize o respectivo comando salvo anteriormente.**
 
-**Antes inicar qualquers container, crie manualmente a sua rede docker (ex: SuaRede-swarm):**
+**Antes inicar qualquers container, crie manualmente a sua rede docker (ex: SuaRede_swarm):**
 ```bash
-docker network create --driver=overlay SuaRede-swarm
+docker network create --driver=overlay SuaRede_swarm
 ```
+
+**Também crie manualmente os seus volumes externos:**
+```bash
+docker volume create --name portainer_data
+docker volume create --name traefik_shared
+docker volume create --name traefik_certificates
+docker volume create --name traefik_log
+
+```
+
 * Com isso, seu cluster docker swarm está pronto.
 
 

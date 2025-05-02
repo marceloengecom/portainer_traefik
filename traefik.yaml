@@ -52,7 +52,7 @@ services:
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "vol_certificates:/etc/traefik/letsencrypt"
-      - "vol_logs:/var/log/traefik"
+      - "vol_log:/var/log/traefik"
     ports:
       - target: 80
         published: 80
@@ -70,9 +70,9 @@ volumes:
   vol_certificates:
     external: true
     name: traefik_certificates
-  vol_logs:
+  vol_log:
     external: true
-    name: traefik_logs
+    name: traefik_log
 
 
 networks:
