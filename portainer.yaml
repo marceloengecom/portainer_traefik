@@ -24,8 +24,7 @@ services:
       placement:
         constraints:
           - node.role == manager
-         # - node.hostname == srvbotpro-master1
-
+         # - node.hostname == manager-01
   portainer:
     # Em ambiente de produção, defina uma versão devidamente testada do traefik
     # Conferir a versão em: https://hub.docker.com/r/portainer/portainer-ce/tags
