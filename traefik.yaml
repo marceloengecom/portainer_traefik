@@ -1,11 +1,11 @@
-##############################################################################################################################
+###################################################################################################################################
 #
 # Substitua as variáveis ${LETSENCRYPT_EMAIL}, ${TRAEFIK_DOMAIN} e ${DOCKER_NETWORK} pelos valores correspondentes
 #
 #
-# O acesso ao dashboard do Traefik pode ser feito em: http://IP:8080/dashboard/ ou http://${TRAEFIK_DOMAIN}:8080/dashboard/
+# O acesso ao web ui do Traefik pode ser feito em: http://IP:8080/dashboard/ ou http://${TRAEFIK_DOMAIN}:8080/dashboard/ (Sem SSL)
 #
-##############################################################################################################################
+###################################################################################################################################
 
 services:
 

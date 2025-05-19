@@ -12,6 +12,16 @@ Obs: Como vamos utilizar um proxy reverso, é importante já ter o dominio do po
 apt update && apt upgrade -y
 ```
 
+**Configure o fuso horário. Em nosso caso, São Paulo:**
+```bash
+timedatectl set-timezone America/Sao_Paulo
+```
+
+**Confira se a alteração foi alterada:**
+```bash
+timedatectl
+```
+
 **Estando no servidor, como root, instalar o docker:**
 ```bash
 apt-get install -y apparmor-utils
