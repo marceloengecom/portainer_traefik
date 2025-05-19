@@ -19,8 +19,7 @@ services:
       - "9001:9001"  # Porta necessária para comunicação com o Portainer CE   
     deploy:
       #mode: global # Roda 1 instância em cada nó do Swarm
-      mode: replicated
-      replicas: 1
+      mode: global      
       placement:
         constraints:
           - node.role == manager

@@ -68,10 +68,10 @@ volumes:
 
   vol_shared:
     external: true
-    name: swarm_shared
+    name: traefik_shared
   vol_certificates:
     external: true
-    name: swarm_certificates
+    name: traefik_certificates
   vol_log:
     external: true
     name: traefik_log

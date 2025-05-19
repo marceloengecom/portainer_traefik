@@ -22,7 +22,7 @@ curl -fsSL https://get.docker.com | bash
 
 **Para orquestração de containers, estando no nó manager, inicie o docker swarm com respectivo endereço IP (privado ou público):**
 ```bash
-  docker swarm init --advertise-addr <IP_manager>
+docker swarm init --advertise-addr <IP_manager>
 ```
 *Aparecerá uma mensagem! Guarde os dois comandos (adição de worker e de manager) em um lugar seguro.
 
@@ -49,17 +49,17 @@ docker volume create --name traefik_log
 
 **Acesse ou crie uma pasta (ex: /opt), para armazenar os arquivos yaml:**
 ```bash
-  cd /opt
+cd /opt
 ```
 
 **Faça o download do repositorio:**
 ```bash
-  git clone https://github.com/marceloengecom/portainer_traefik.git
+git clone https://github.com/marceloengecom/portainer_traefik.git
 ```
 
 **Após o clone, será criada um pasta com o nome do repositório (ex: /opt/portainer_traefik). Acesse essa pasta:**
 ```bash
-  cd /opt/portainer_traefik`
+cd /opt/portainer_traefik
 ```
 
 
@@ -80,7 +80,7 @@ ${DOCKER_NETWORK}: SuaRede-swarm (mesma rede criada anteriormente) - 4 ocorrênc
 
 inicie o container do Traefik:
 ```bash
-  docker stack deploy --prune --resolve-image always -c traefik.yaml traefik
+docker stack deploy --prune --resolve-image always -c traefik.yaml traefik
 ```
 
 
@@ -111,18 +111,18 @@ docker stack deploy --prune --resolve-image always -c portainer.yaml portainer
 
 **Não mude nada nos arquivos .yaml e ajuste as suas respectivas variáveis no arquivo .env:**
 ```bash
-  nano /opt/portainer_traefik/.env`
+nano /opt/portainer_traefik/.env`
 ```
 **Carregue todas as variáveis do .env como variável de ambiente:**
 ```bash
-  export $(grep -v '^#' .env | xargs)
+export $(grep -v '^#' .env | xargs)
 ```
 
 **Lê as variáveis do ambiente (que você acabou de exportar) e faz o deploy da stack com as respectivas variáveis:**
 ```bash
-  envsubst < traefik.yaml | docker stack deploy --prune --resolve-image always -c - traefik
+envsubst < traefik.yaml | docker stack deploy --prune --resolve-image always -c - traefik
 ```
 **Lê as variáveis do ambiente (que você acabou de exportar) e faz o deploy da stack com as respectivas variáveis:**
 ```bash
-  envsubst < portainer.yaml | docker stack deploy --prune --resolve-image always -c - portainer
+envsubst < portainer.yaml | docker stack deploy --prune --resolve-image always -c - portainer
 ```
