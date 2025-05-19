@@ -35,6 +35,7 @@ services:
       - "--log.filePath=/var/log/traefik/traefik.log"
       - "--accesslog=true"
       - "--accesslog.filepath=/var/log/traefik/access-log"
+      - "--entrypoints.traefik.address=:8090"      
       # Servidor de staging para testes. Remover/Comentar quando for colocar em produção
       - "--certificatesresolvers.letsencryptresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
       ################################################################################################
