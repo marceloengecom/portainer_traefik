@@ -3,7 +3,7 @@
 # Substitua as variáveis ${LETSENCRYPT_EMAIL}, ${TRAEFIK_DOMAIN} e ${DOCKER_NETWORK} pelos valores correspondentes
 #
 #
-# O acesso ao web ui do Traefik pode ser feito em: http://IP:8080/dashboard/ ou http://${TRAEFIK_DOMAIN}:8080/dashboard/ (Sem SSL)
+# O acesso ao web ui do Traefik pode ser feito em: http://IP:8090/dashboard/ ou http://${TRAEFIK_DOMAIN}:8090/dashboard/ (Sem SSL)
 #
 ###################################################################################################################################
 
@@ -71,8 +71,8 @@ services:
       - target: 443
         published: 443
         mode: host
-      - target: 8080
-        published: 8080
+      - target: 8090
+        published: 8090
         mode: host
 
     networks:
