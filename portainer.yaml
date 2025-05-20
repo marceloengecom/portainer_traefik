@@ -44,7 +44,7 @@ services:
         - "traefik.enable=true"
         - "traefik.docker.network=${DOCKER_NETWORK}"
         - "traefik.http.routers.portainer.rule=Host(`${PORTAINER_DOMAIN}`)"
-        - "traefik.http.routers.portainer.rule=HostRegexp(`{host:.+}`)"
+        #- "traefik.http.routers.portainer.rule=HostRegexp(`{host:.+}`)"  # Captura todos os domínios.
         - "traefik.http.routers.portainer.entrypoints=websecure"
         - "traefik.http.routers.portainer.priority=1"
         - "traefik.http.routers.portainer.tls.certresolver=letsencryptresolver"
