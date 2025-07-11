@@ -11,25 +11,24 @@ services:
 
   traefik:
     # Em ambiente de produção, defina uma versão devidamente testada do traefik
-    image: traefik:2.11.24
+    image: traefik:3.4.0
     command:
       - "--api.dashboard=true"      
-      # Apenas para ambiente de desenvolvimento/teste. Remover/Comentar quando for colocar em produção
-      - "--api.insecure=true"
-      ################################################################################################
-      - "--providers.docker.swarmMode=true"
+      - "--providers.swarm=true"
       - "--providers.docker.endpoint=unix:///var/run/docker.sock"
       - "--providers.docker.exposedbydefault=false"
-      - "--providers.docker.network=${DOCKER_NETWORK}"
+      - "--providers.docker.network=${DOCKER_NETWORK}"  ## Nome da rede interna criada anteriormente
       - "--entrypoints.web.address=:80"
       - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
       - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
       - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
       - "--entrypoints.websecure.address=:443"
+      - "--entrypoints.web.transport.respondingTimeouts.idleTimeout=3600"
       - "--certificatesresolvers.letsencryptresolver.acme.httpchallenge=true"
       - "--certificatesresolvers.letsencryptresolver.acme.httpchallenge.entrypoint=web"
-      - "--certificatesresolvers.letsencryptresolver.acme.email=${LETSENCRYPT_EMAIL}"
       - "--certificatesresolvers.letsencryptresolver.acme.storage=/etc/traefik/letsencrypt/acme.json"
+      - "--certificatesresolvers.letsencryptresolver.acme.email=${LETSENCRYPT_EMAIL}" ## Email para receber as notificações
+      
       - "--log.level=DEBUG"
       - "--log.format=common"
       - "--log.filePath=/var/log/traefik/traefik.log"
@@ -37,34 +36,19 @@ services:
       - "--accesslog.filepath=/var/log/traefik/access-log"
       - "--entrypoints.traefik.address=:8090"      
       # Servidor de staging para testes. Remover/Comentar quando for colocar em produção
-      - "--certificatesresolvers.letsencryptresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
-      ################################################################################################
-    deploy:
-      #mode: global # Roda 1 instância em cada nó do Swarm
-      mode: replicated
-      replicas: 1
-      placement:
-        constraints:
-          - node.role == manager
-         # - node.hostname == manager-01
-      labels:
-        - "traefik.enable=true"
-        - "traefik.http.middlewares.redirect-https.redirectscheme.scheme=https"
-        - "traefik.http.middlewares.redirect-https.redirectscheme.permanent=true"
-        - "traefik.http.routers.http-catchall.rule=hostregexp(`{host:.+}`)"
-        - "traefik.http.routers.http-catchall.entrypoints=web"
-        - "traefik.http.routers.http-catchall.middlewares=redirect-https@docker"
-        - "traefik.http.routers.http-catchall.priority=1"
-
-        - "traefik.http.routers.traefik.rule=Host(`${TRAEFIK_DOMAIN}`)"
-        - "traefik.http.routers.traefik.entrypoints=websecure"
-        - "traefik.http.routers.traefik.service=api@internal"
-        - "traefik.http.routers.traefik.tls.certresolver=letsencryptresolver"        
+      #- "--certificatesresolvers.letsencryptresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
+      # 
+      #- "--api.insecure=true"
+      ########################################################################################################################
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "vol_certificates:/etc/traefik/letsencrypt"
-      - "vol_shared:/etc/traefik/shared"  # Mapeamento para pasta shared
-      - "vol_log:/var/log/traefik"
+      #- "vol_shared:/etc/traefik/shared"  # Mapeamento para pasta shared
+      #- "vol_log:/var/log/traefik"
+    
+    networks:
+      - ${DOCKER_NETWORK} ## Nome da rede interna criada anteriormente
+
     ports:
       - target: 80
         published: 80
@@ -76,22 +60,41 @@ services:
         published: 8090
         mode: host
 
-    networks:
-      - ${DOCKER_NETWORK}
+    deploy:
+      #mode: global # Roda 1 instância em cada nó do Swarm
+      mode: replicated
+      replicas: 1
+      placement:  # Roda somente no manager
+        constraints:
+          - node.role == manager
+         # - node.hostname == manager-01
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.middlewares.redirect-https.redirectscheme.scheme=https"
+        - "traefik.http.middlewares.redirect-https.redirectscheme.permanent=true"
+        - "traefik.http.routers.http-catchall.rule=Host(`{host:.+}`)"
+        - "traefik.http.routers.http-catchall.entrypoints=web"
+        - "traefik.http.routers.http-catchall.middlewares=redirect-https@docker"
+        - "traefik.http.routers.http-catchall.priority=1"
+
+        - "traefik.http.routers.traefik.rule=Host(`${TRAEFIK_DOMAIN}`)"
+        - "traefik.http.routers.traefik.entrypoints=websecure"
+        - "traefik.http.routers.traefik.service=api@internal"
+        - "traefik.http.routers.traefik.tls.certresolver=letsencryptresolver"      
 
 volumes:
-
   vol_shared:
     external: true
     name: traefik_shared
   vol_certificates:
     external: true
     name: traefik_certificates
-  vol_log:
-    external: true
-    name: traefik_log
+  # vol_log:
+  #   external: true
+  #   name: traefik_log
 
 networks:
   ${DOCKER_NETWORK}:
     external: true
-    name: ${DOCKER_NETWORK}
+    attachable: true
+    name: ${DOCKER_NETWORK} ## Nome da rede interna criada anteriormente
