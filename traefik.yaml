@@ -11,10 +11,10 @@ services:
 
   traefik:
     # Em ambiente de produção, defina uma versão devidamente testada do traefik
-    image: traefik:3.4.0
+    image: traefik:2.11.27
     command:
       - "--api.dashboard=true"      
-      - "--providers.swarm=true"
+      - "--providers.docker.swarmMode=true"
       - "--providers.docker.endpoint=unix:///var/run/docker.sock"
       - "--providers.docker.exposedbydefault=false"
       - "--providers.docker.network=${DOCKER_NETWORK}"  ## Nome da rede interna criada anteriormente
@@ -35,16 +35,15 @@ services:
       - "--accesslog=true"
       - "--accesslog.filepath=/var/log/traefik/access-log"
       - "--entrypoints.traefik.address=:8090"      
-      # Servidor de staging para testes. Remover/Comentar quando for colocar em produção
-      #- "--certificatesresolvers.letsencryptresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
-      # 
+      # Servidor de staging para testes. Remover/Comentar quando for colocar em produção #####################################
+      #- "--certificatesresolvers.letsencryptresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"   
       #- "--api.insecure=true"
       ########################################################################################################################
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "vol_certificates:/etc/traefik/letsencrypt"
-      #- "vol_shared:/etc/traefik/shared"  # Mapeamento para pasta shared
-      #- "vol_log:/var/log/traefik"
+      - "vol_shared:/etc/traefik/shared"  # Mapeamento para pasta shared
+      - "vol_log:/var/log/traefik"
     
     networks:
       - ${DOCKER_NETWORK} ## Nome da rede interna criada anteriormente
@@ -89,9 +88,9 @@ volumes:
   vol_certificates:
     external: true
     name: traefik_certificates
-  # vol_log:
-  #   external: true
-  #   name: traefik_log
+  vol_log:
+    external: true
+    name: traefik_log
 
 networks:
   ${DOCKER_NETWORK}:

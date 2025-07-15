@@ -38,9 +38,9 @@ docker swarm init --advertise-addr <IP_manager>
 
 **Caso queira adicionar outros nós (worker e manager) e assim, formar um cluster, acesse a(s) outras VM(s), instale o docker e utilize o respectivo comando salvo anteriormente.**
 
-**Antes inicar qualquers container, crie manualmente a sua rede docker (ex: NomeRede_swarm):**
+**Antes inicar qualquers container, crie manualmente a sua rede docker (ex: Rede_Docker):**
 ```bash
-docker network create --driver=overlay --attachable NomeRede_swarm
+docker network create --driver=overlay --attachable Rede_Docker
 ```
 
 **Também crie manualmente os seus volumes externos:**
