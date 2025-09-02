@@ -11,7 +11,7 @@ services:
 
   traefik:
     # Em ambiente de produção, defina uma versão devidamente testada do traefik
-    image: traefik:2.11.27
+    image: traefik:v3.4.0
     command:
       - "--api.dashboard=true"      
       - "--providers.docker.swarmMode=true"
@@ -42,7 +42,7 @@ services:
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "vol_certificates:/etc/traefik/letsencrypt"
-      - "vol_shared:/etc/traefik/shared"  # Mapeamento para pasta shared
+      - "vol_shared:/etc/traefik/shared"
       - "vol_log:/var/log/traefik"
     
     networks:
