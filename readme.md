@@ -83,7 +83,7 @@ Procure pelas variáveis e substitua pelos respectivos valores:
 ${LETSENCRYPT_EMAIL}: SeuEmail@dominio.com (deve ser um e-mail válido) - 1 ocorrência no arquivo
 ${TRAEFIK_DOMAIN}: traefik.dominio.com (deve ser um domínio válido e já propagado) - 1 ocorrência no arquivo
 ${DOCKER_NETWORK}: SuaRede (sua rede docker, já criada anteriormente) - 4 ocorrências no arquivo
-${HASH_TRAEFIK}: SenhaHashTraefik (Senha administrativa do traefik, em formato hash.) 1 ocorrência no arquivo
+${HASH_TRAEFIK}: UsuarioSenhaHashTraefik (Senha administrativa do traefik, em formato hash.) 1 ocorrência no arquivo
 ```
 
 inicie o container do Traefik:

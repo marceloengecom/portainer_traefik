@@ -91,7 +91,7 @@ services:
         # Autenticação para o dashboard do Traefik (opcional, mas recomendado)
         # Gerar hash: echo $(htpasswd -nb admin SENHA) | sed -e s/\\$/\\$\\$/g      
         - "traefik.http.routers.traefik.middlewares=auth"
-        - "traefik.http.middlewares.auth.basicauth.users=admin:$$apr1$$.${HASH_TRAEFIK}"        
+        - "traefik.http.middlewares.auth.basicauth.users=${HASH_TRAEFIK}"        
         
 
 volumes:
