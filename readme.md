@@ -38,18 +38,16 @@ docker swarm init --advertise-addr <IP_manager>
 
 **Caso queira adicionar outros nós (worker e manager) e assim, formar um cluster, acesse a(s) outras VM(s), instale o docker e utilize o respectivo comando salvo anteriormente.**
 
-**Antes inicar qualquers container, crie manualmente a sua rede docker (ex: Rede_Docker):**
+**Antes inicar qualquers container, crie manualmente a sua rede docker (ex: RedeDocker):**
 ```bash
-docker network create --driver=overlay --attachable Rede_Docker
+docker network create --driver=overlay --attachable RedeDocker
 ```
 
 **Também crie manualmente os seus volumes externos:**
 ```bash
 docker volume create --name portainer_data
-docker volume create --name traefik_shared
+docker volume create --name traefik_logs
 docker volume create --name traefik_certificates
-# docker volume create --name traefik_log
-
 ```
 
 * Com isso, seu cluster docker swarm está pronto.
@@ -72,7 +70,6 @@ git clone https://github.com/marceloengecom/portainer_traefik.git
 cd /opt/portainer_traefik
 ```
 
-
 #### TRAEFIK:
 
 **Editer o arquivo traefik.yaml:**
@@ -84,8 +81,10 @@ nano traefik.yaml
 Procure pelas variáveis e substitua pelos respectivos valores:
 ```bash
 ${LETSENCRYPT_EMAIL}: SeuEmail@dominio.com (deve ser um e-mail válido) - 1 ocorrência no arquivo
-${TRAEFIK_DOMAIN}: traefik.dominio.com (deve ser um domínio válido e publicado) - 1 ocorrência no arquivo
-${DOCKER_NETWORK}: SuaRede-swarm (mesma rede criada anteriormente) - 4 ocorrências no arquivo
+${TRAEFIK_DOMAIN}: traefik.dominio.com (deve ser um domínio válido e já propagado) - 1 ocorrência no arquivo
+${PORTAINER_DOMAIN}: portainer.dominio.com (deve ser um domínio válido e já propagado) - 1 ocorrência no arquivo
+${DOCKER_NETWORK}: SuaRede (sua rede docker, já criada anteriormente) - 4 ocorrências no arquivo
+${HASH_TRAEFIK}: SenhaHashTraefik (Senha administrativa do traefik, em formato hash.) 1 ocorrência no arquivo
 ```
 
 inicie o container do Traefik:
