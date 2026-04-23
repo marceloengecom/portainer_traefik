@@ -24,7 +24,7 @@ timedatectl
 
 **Estando no servidor, como root, instalar o docker:**
 ```bash
-apt-get install -y apparmor-utils
+apt install apache2-utils -y
 ```
 ```bash
 curl -fsSL https://get.docker.com | bash
